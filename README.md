@@ -34,18 +34,22 @@ You can use another tool to run Kubernetes as k3s, microk8s or minikube. You hav
 
 ## Development
 
-During the development we use (skaffold)[https://skaffold.dev/]. To start the stack with skaffold execute this command:
+During the development we use [skaffold](https://skaffold.dev/). To start the stack with skaffold execute this command:
 
 ```bash
 skaffold dev
 ```
 
-### DEBUG
+### Debug
 
 To debug the application you can run the skaffold on [debug mode](https://skaffold.dev/docs/workflows/debug/) that use inspector protocol.
 
 ```bash
-skaffold debug
+skaffold debug --auto-sync
 ```
+A remote url is open to attach the VSCode debugger "**Auth NodeJS Code**" configured into the file *.vscode/lauch.json*.
 
-A remote url is open to attach the VSCode debugger "Auth NodeJS Code".
+We set **--auto-sync** flag to ensure the synchronization of change:
+
+> One notable difference from skaffold dev is that debug disables image rebuilding and syncing as it leads to users accidentally terminating debugging sessions by saving file changes. These behaviours can be re-enabled with the --auto-build, --auto-deploy, and --auto-sync flags. 
+
