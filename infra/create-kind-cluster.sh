@@ -74,5 +74,6 @@ nodes:
 EOF
 
 echo "Configuring ingress nginx"
-
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+echo "Installing cert-manager"
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
