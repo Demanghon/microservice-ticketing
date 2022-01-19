@@ -39,3 +39,13 @@ During the development we use (skaffold)[https://skaffold.dev/]. To start the st
 ```bash
 skaffold dev
 ```
+
+### DEBUG
+
+To debug the application you can run the skaffold on [debug mode](https://skaffold.dev/docs/workflows/debug/) that use inspector protocol.
+
+```bash
+skaffold debug
+```
+
+A remote url is open to attach the VSCode debugger "Auth NodeJS Code".
