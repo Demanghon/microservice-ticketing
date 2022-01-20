@@ -9,10 +9,16 @@ import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 import dotenv from 'dotenv';
 import { connect } from "./mongo/mongo-config";
+import cookieSession from "cookie-session";
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', true);
 app.use(json());
+app.use(cookieSession({
+    signed: false,
+    secure: true,
+}))
 
 app.use(currentUserRouter);
 app.use(signinRouter);
