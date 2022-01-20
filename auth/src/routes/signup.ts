@@ -3,6 +3,7 @@ import "express-async-errors";
 import { body, validationResult } from "express-validator";
 import { DatabaseConnectionError } from "../errors/database-connection-error";
 import { RequestValidationError } from "../errors/request-validation-error";
+import { User } from "../models/user";
 
 const router = express.Router();
 
@@ -21,10 +22,21 @@ router.post("/api/users/signup", [
         throw new RequestValidationError(errors.array());
     }
 
-    throw new DatabaseConnectionError("Error connection to the database");
-
     const {email, password} = req.body;
-    res.send({email, password});
+
+    const existingEmail = await User.exists({email});
+    if (existingEmail){
+        throw new RequestValidationError([{
+            location: "body", 
+            value: email, 
+            param: "email", 
+            msg: "Email in use"}]);
+    } 
+
+    const user = User.build({email, password});
+    const result = await user.save();
+
+    res.status(201).send(result);
 });
 
 export { router as signupRouter };

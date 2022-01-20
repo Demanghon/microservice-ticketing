@@ -7,6 +7,9 @@ import { signupRouter } from "./routes/signup";
 import { signoutRouter } from "./routes/signout";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
+import dotenv from 'dotenv';
+import { connect } from "./mongo/mongo-config";
+dotenv.config();
 
 const app = express();
 app.use(json());
@@ -22,6 +25,12 @@ app.get('*', async (req, res, next) => {
 
 app.use(errorHandler);
 
-app.listen(3000, () => {
-    console.log("Listening on port 3000");
-});
+const start = async () => {
+    connect().then(() => {
+        app.listen(3000, () => {
+            console.log("Listening on port 3000!");
+        });
+    });
+};
+
+start();
