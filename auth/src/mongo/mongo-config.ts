@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import { ConfigurationError } from "../errors/configuration-error";
 import { DatabaseConnectionError } from "../errors/database-connection-error";
 
 export const connect = (): Promise<typeof mongoose> => {
     const url = process.env.MONGO_AUTH_URL!;
+
+    console.log(url);
 
     const connectionPromise = mongoose.connect(url);
 
@@ -20,6 +23,6 @@ export const disconnect = () => {
     }
 
     mongoose.disconnect().then(async () => {
-        console.log("Diconnected  to database");
+        console.log("Diconnected to database");
     });
 };

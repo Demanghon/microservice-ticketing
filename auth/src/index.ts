@@ -10,6 +10,7 @@ import { NotFoundError } from "./errors/not-found-error";
 import dotenv from 'dotenv';
 import { connect } from "./mongo/mongo-config";
 import cookieSession from "cookie-session";
+import { check as checkConfig } from "./config/config-checker";
 dotenv.config();
 
 const app = express();
@@ -32,9 +33,10 @@ app.get('*', async (req, res, next) => {
 app.use(errorHandler);
 
 const start = async () => {
+    checkConfig();
     connect().then(() => {
         app.listen(3000, () => {
-            console.log("Listening on port 3000!");
+            console.log("Listening on port 3000");
         });
     });
 };

@@ -2,11 +2,14 @@
 
 This project offers a hub to sell and buy tickets between users. It is based on a Microservices Architecture.
 
-## Deployement
+## Requirements
 
-The deployment of services is based on Kubernetes. 
+The stack is deployed on a Kubernetes cluster, so you need to have this tools installed to continue:
+- [docker](https://www.docker.com/)
+- [kind](https://kind.sigs.k8s.io/): you can use an another too to run Kubernetes as minikube, k3s or Kubernetes
+- [skaffold](https://skaffold.dev/) to deploy the stack on kubernetes
 
-### Registry
+## Configure the registry
 
 We are using a docker local registry for this project. 
 
@@ -18,21 +21,29 @@ docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
 > more information [here](https://docs.docker.com/registry/deploying/)
 
-## Kind
+## Create and configure cluster
 
-We are using [kind(https://kind.sigs.k8s.io/)] as local Kubernetes. To install it you can follow [these instructions](https://kind.sigs.k8s.io/docs/user/quick-start/).
-
-After you can run the script infra/create-kind-cluster.sh to configure the cluster with Ingress NGINX.
+A script is available to create a cluster on kind and configure it:
 
 ```bash
 bash infra/create-kind-cluster.sh
 ```
 
-### Another tool
+This script :
+- configures an NGINX ingress
+- Create a secret to store the JWT Key (we are using JWT for the authentication)
+- Generate a self-signed certificate with [cert-manager](https://cert-manager.io/docs/)
 
-You can use another tool to run Kubernetes as k3s, microk8s or minikube. You have to assume to install Ingress NGINX as ingress controller. 
+> You can use an another tool to run kubernetes than kind but you have to assume the installation and the configuration of your cluster.
+ 
+## Configure .env
 
-## Development
+The following projects use *.env* file as configuration:
+- auth
+
+The .env files are not commited for securtiy issue. However, each project has a sample.env file to help you to generate your own .env files corresponding at your configuration.
+
+## Start the stack
 
 During the development we use [skaffold](https://skaffold.dev/). To start the stack with skaffold execute this command:
 
