@@ -5,8 +5,6 @@ import { DatabaseConnectionError } from "../errors/database-connection-error";
 export const connect = (): Promise<typeof mongoose> => {
     const url = process.env.MONGO_AUTH_URL!;
 
-    console.log(url);
-
     const connectionPromise = mongoose.connect(url);
 
     mongoose.connection.on("error", (err) => {
