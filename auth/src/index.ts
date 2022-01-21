@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import { connect } from "./mongo/mongo-config";
 import cookieSession from "cookie-session";
 import { check as checkConfig } from "./config/config-checker";
+import { setCurrentUser } from "./middlewares/set-current-user";
 dotenv.config();
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(cookieSession({
     signed: false,
     secure: true,
 }))
+app.use(setCurrentUser)
 
 app.use(currentUserRouter);
 app.use(signinRouter);
@@ -29,6 +31,7 @@ app.use(signoutRouter);
 app.get('*', async (req, res, next) => {
     throw new NotFoundError();
 })
+
 
 app.use(errorHandler);
 
