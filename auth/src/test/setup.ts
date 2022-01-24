@@ -6,6 +6,12 @@ let mongo:MongoMemoryServer;
 
 jest.setTimeout(20000);
 
+module.exports = {
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+    
+}
+
 //prepare the connection to mongodb memory server
 beforeAll(async () => {
     process.env.JWT_KEY = "jwtkey";
