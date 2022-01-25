@@ -36,12 +36,46 @@ This script :
 
 > You can use an another tool to run kubernetes than kind but you have to assume the installation and the configuration of your cluster.
  
-## Configure .env
+## Configure local dependencies
 
-The following projects use *.env* file as configuration:
+The *common* package that is a shared library for follwing projects :
 - auth
 
-The .env files are not commited for securtiy issue. However, each project has a sample.env file to help you to generate your own .env files corresponding at your configuration.
+From the development we use a local repository with [yalc](https://github.com/wclr/yalc) to test easily.
+
+### Install Yalc:
+
+```bash
+npm i yalc -g
+```
+
+### Publish common package:
+
+Go to the root directory and execute the following command:
+
+```bash
+yalc publish common
+```
+
+> this command will publish a new version of *common* package and update all project with this dependencies.  
+
+### Install common dependency:
+
+Go to the root directory and execute the following command:
+
+```bash
+cd auth && yalc update
+```
+
+### Update common package
+
+You can use the following command when do you want to update all dependencies after the publishing of a new version of *package" module:
+
+```bash
+yalc publish --push common
+```
+
+> yalc publish --push will publish your package to the store and propagate all changes to existing yalc package installations (this will actually do update operation on the location). So, you have to assume the first update on each project to create the yalc package installation.
 
 ## Start the stack
 

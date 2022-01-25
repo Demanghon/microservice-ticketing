@@ -1,7 +1,6 @@
 import request from 'supertest'
 import {app} from '../../app'
 import assert from 'assert'
-import { ErrorModel } from '../../errors/serializable-error';
 
 it('return the current user', async () => {
     await request(app)

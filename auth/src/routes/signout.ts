@@ -1,5 +1,5 @@
 import express from "express";
-import { requireAuth } from "../middlewares/require-auth";
+import { requireAuth } from "@ticketing/common";
 
 const router = express.Router();
 

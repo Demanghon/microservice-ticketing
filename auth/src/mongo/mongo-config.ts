@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { ConfigurationError } from "../errors/configuration-error";
-import { DatabaseConnectionError } from "../errors/database-connection-error";
+import { ConfigurationError } from "@ticketing/common";
+import { DatabaseConnectionError } from "@ticketing/common";
 
 export const connect = (): Promise<typeof mongoose> => {
     const url = process.env.MONGO_AUTH_URL!;

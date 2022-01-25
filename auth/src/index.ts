@@ -1,9 +1,9 @@
 import { connect } from "./mongo/mongo-config";
 import {app} from "./app"
-import {check as checkConfig} from "./config/config-checker"
+import {checkConfig} from "@ticketing/common"
 
 const start = async () => {
-    checkConfig();
+    checkConfig(["MONGO_AUTH_URL", "JWT_KEY"]);
     connect().then(() => {
         app.listen(3000, () => {
             console.log("Listening on port 3000");

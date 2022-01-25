@@ -1,6 +1,4 @@
 import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { ConfigurationError } from "../errors/configuration-error";
 
 const router = express.Router();
 

@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import {body} from "express-validator"
 import jwt from "jsonwebtoken";
-import { SigninError } from "../errors/signin-error";
-import { validateRequest } from "../middlewares/validate-request";
+import { SigninError } from "@ticketing/common";
+import { validateRequest } from "@ticketing/common";
 import { User } from "../models/user";
 import { Password } from "../services/password";
 
