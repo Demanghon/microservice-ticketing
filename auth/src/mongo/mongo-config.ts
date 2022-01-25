@@ -3,7 +3,7 @@ import { ConfigurationError } from "@ticketing/common";
 import { DatabaseConnectionError } from "@ticketing/common";
 
 export const connect = (): Promise<typeof mongoose> => {
-    const url = process.env.MONGO_AUTH_URL!;
+    const url = process.env.MONGO_URI!;
 
     const connectionPromise = mongoose.connect(url);
 

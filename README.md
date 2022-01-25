@@ -40,6 +40,7 @@ This script :
 
 The *common* package that is a shared library for follwing projects :
 - auth
+- tickets
 
 From the development we use a local repository with [yalc](https://github.com/wclr/yalc) to test easily.
 
@@ -65,6 +66,7 @@ Go to the root directory and execute the following command:
 
 ```bash
 cd auth && yalc add @ticketing/common
+cd ../tickets && yalc add @ticketing/common
 ```
 
 ### Update common package

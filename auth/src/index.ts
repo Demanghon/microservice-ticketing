@@ -3,7 +3,7 @@ import {app} from "./app"
 import {checkConfig} from "@ticketing/common"
 
 const start = async () => {
-    checkConfig(["MONGO_AUTH_URL", "JWT_KEY"]);
+    checkConfig(["MONGO_URI", "JWT_KEY"]);
     connect().then(() => {
         app.listen(3000, () => {
             console.log("Listening on port 3000");
