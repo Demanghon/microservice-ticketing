@@ -64,7 +64,7 @@ yalc publish common
 Go to the root directory and execute the following command:
 
 ```bash
-cd auth && yalc update
+cd auth && yalc add @ticketing/common
 ```
 
 ### Update common package
