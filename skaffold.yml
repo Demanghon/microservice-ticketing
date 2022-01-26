@@ -24,7 +24,7 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
-    - image: localhost:5000//tickets
+    - image: localhost:5000/ticketing-tickets
       context: tickets
       docker:
         dockerfile: Dockerfile
