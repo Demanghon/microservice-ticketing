@@ -8,6 +8,34 @@
             "type": "node",
             "localRoot": "${workspaceRoot}/auth",
             "remoteRoot": "/app"
+        },
+        {
+            "name": "Debug Order Tests",
+            "type": "node",
+            "request": "launch",
+            "localRoot": "${workspaceRoot}/orders",
+            "runtimeArgs": [
+                "--inspect-brk",
+                "${workspaceRoot}/orders/node_modules/.bin/jest",
+                "--runInBand", "--watchAll", "--no-cache"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "port": 9229
+        },
+        {
+            "name": "Debug Tickets Tests",
+            "type": "node",
+            "request": "launch",
+            "localRoot": "${workspaceRoot}/tickets",
+            "runtimeArgs": [
+                "--inspect-brk",
+                "${workspaceRoot}/tickets/node_modules/.bin/jest",
+                "--runInBand", "--watchAll", "--no-cache"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "port": 9229
         }
     ]
 }

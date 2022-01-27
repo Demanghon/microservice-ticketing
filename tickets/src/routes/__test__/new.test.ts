@@ -1,7 +1,6 @@
 import { natsWrapper, Subjects } from '@ticketing/common';
 import request from 'supertest';
 import { app } from '../../app';
-import { TicketCreaterPublisher } from '../../events/publishers/ticket-created-publisher';
 import { Ticket } from '../../models/ticket';
 
 it('has a route handler listening to /api/tickets for post requests', async () => {
