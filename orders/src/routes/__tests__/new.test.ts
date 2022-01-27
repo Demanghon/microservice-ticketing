@@ -1,3 +1,4 @@
+import { natsWrapper, Subjects } from '@ticketing/common';
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
@@ -51,3 +52,20 @@ it('reserves a ticket', async () => {
     .send({ ticketId: ticket.id })
     .expect(201);
 });
+
+it('publishes an event', async () => {
+  const ticket = Ticket.build({
+    title: 'concert',
+    price: 20,
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalledWith(Subjects.OrderCreated, expect.anything(), expect.anything());
+})
+

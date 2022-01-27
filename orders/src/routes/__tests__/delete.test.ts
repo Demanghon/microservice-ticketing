@@ -1,3 +1,4 @@
+import { natsWrapper, Subjects } from '@ticketing/common';
 import request from 'supertest';
 import { app } from '../../app';
 import { Order, OrderStatus} from '../../models/order';
@@ -14,7 +15,7 @@ const buildTicket = async () => {
 };
 
 it('cancel an order', async () => {
-  // Create three tickets
+  // Create ticket
   const ticketOne = await buildTicket();
   const user = global.signin();
   // Create one order as User #1
@@ -70,3 +71,24 @@ it('try to cancel an order of another user', async () => {
     .set('Cookie', global.signin())
     .expect(401);
 });
+
+it('publishes an event', async () => {
+  // Create ticket
+  const ticketOne = await buildTicket();
+  const user = global.signin();
+  // Create one order as User
+  const {body:orderCreated}= await request(app)
+    .post('/api/orders')
+    .set('Cookie', user)
+    .send({ ticketId: ticketOne.id })
+    .expect(201);
+    expect(orderCreated.status).toEqual(OrderStatus.Created);
+  //cancel the order
+  await request(app)
+    .delete(`/api/orders/${orderCreated.id}`)
+    .set('Cookie', user)
+    .send({ ticketId: ticketOne.id })
+    .expect(204);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalledWith(Subjects.OrderCancelled, expect.anything(), expect.anything());
+})

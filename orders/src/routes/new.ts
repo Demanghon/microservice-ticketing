@@ -1,8 +1,9 @@
-import { NotFoundError, OrderStatus, requireAuth, setCurrentUser, validateRequest } from "@ticketing/common";
+import { natsWrapper, NotFoundError, OrderStatus, requireAuth, setCurrentUser, validateRequest } from "@ticketing/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import mongoose from "mongoose";
 import { TicketAlreadyReservedError } from "../errors/ticket-already-reserved-error";
+import { OrderCreatedPublsher } from "../events/publishers/order-created-publisher";
 import { Order } from "../models/order";
 import { Ticket } from "../models/ticket";
 
@@ -45,6 +46,17 @@ async (req: Request, res: Response) => {
     })
 
     await order.save();
+
+    await new OrderCreatedPublsher(natsWrapper.client).publish({
+        id: order.id,
+        status: order.status,
+        userId: order.userId,
+        expiresAt: order.expiresAt.toISOString(),
+        ticket: {
+            id: ticket.id,
+            price: ticket.price
+        }
+    });
 
     res.status(201).send(order);
 

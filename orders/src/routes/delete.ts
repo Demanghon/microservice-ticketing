@@ -1,5 +1,6 @@
-import { NotFoundError, OrderStatus, requireAuth, UnauthorizedError, validateRequest } from "@ticketing/common";
+import { natsWrapper, NotFoundError, OrderStatus, requireAuth, UnauthorizedError, validateRequest } from "@ticketing/common";
 import express, { Request, Response } from "express";
+import { OrderCancelledPublsher } from "../events/publishers/order-cancelled-publisher";
 import { Order } from "../models/order";
 
 const router = express.Router();
@@ -15,7 +16,14 @@ async (req: Request, res: Response) => {
         throw new UnauthorizedError();
     }
     order.status = OrderStatus.Cancelled;
-    order.save();
+    await order.save();
+
+    await new OrderCancelledPublsher(natsWrapper.client).publish({
+        id: order.id,
+        ticket: {
+            id: order.ticket.id
+        }
+    });
     
     res.status(204).send(order);
 });
