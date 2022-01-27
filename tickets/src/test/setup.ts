@@ -1,12 +1,25 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
+import { connect } from '../mongo/mongo-config';
 
 declare global {
   var signin: () => string[];
 }
 
-
+jest.mock('@ticketing/common', () => {
+  const actualModule = jest.requireActual('@ticketing/common');
+  return {
+      ...actualModule,
+      natsWrapper: {
+        client: {
+          publish: jest.fn().mockImplementation((subject: string, data:string, callback: () => void) => {
+            callback();
+          })
+        }
+      }
+  }
+});
 
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
@@ -20,9 +33,11 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  
 });
 
 beforeEach(async () => {
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {

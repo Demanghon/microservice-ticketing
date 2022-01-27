@@ -5,8 +5,10 @@ import {
   NotFoundError,
   requireAuth,
   UnauthorizedError,
+  natsWrapper,
 } from '@ticketing/common';
 import { Ticket } from '../models/ticket';
+import { TicketUpdatePublisher } from '../events/publishers/ticket-updated-publisher';
 
 const router = express.Router();
 
@@ -36,6 +38,13 @@ router.put(
       price: req.body.price,
     });
     await ticket.save();
+
+    new TicketUpdatePublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    })
 
     res.send(ticket);
   }

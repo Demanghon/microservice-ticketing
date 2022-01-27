@@ -31,12 +31,12 @@ metadata:
   name: nats-clusterip-srv
 spec:
   selector:
-    apps: nats
+    app: nats
   ports:
     - name: client
       protocol: TCP
-      port: 4442
-      targetPort: 4442 
+      port: 4222
+      targetPort: 4222 
     - name: monitoring
       protocol: TCP
       port: 8222
