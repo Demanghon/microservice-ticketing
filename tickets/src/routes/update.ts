@@ -9,6 +9,7 @@ import {
 } from '@ticketing/common';
 import { Ticket } from '../models/ticket';
 import { TicketUpdatePublisher } from '../events/publishers/ticket-updated-publisher';
+import { TicketOrderedError } from '../errors/ticket-ordered-error';
 
 const router = express.Router();
 
@@ -31,6 +32,10 @@ router.put(
 
     if (ticket.userId !== req.currentUser!.id) {
       throw new UnauthorizedError();
+    }
+
+    if(ticket.orderId){
+      throw new TicketOrderedError();
     }
 
     ticket.set({

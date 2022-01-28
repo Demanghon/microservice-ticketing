@@ -3,7 +3,7 @@ import { Order, OrderStatus } from './order';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 interface TicketAttrs {
-  id?: string;
+  id: string;
   title: string;
   price: number;
 }
@@ -43,12 +43,11 @@ const ticketSchema = new mongoose.Schema(
 ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  const attrsCopy:TicketAttrs&{_id?: string} = {...attrs};
-  if(attrs.id){
-    attrsCopy._id = attrs.id;
-  }
-  delete attrs.id;
-  return new Ticket(attrsCopy);
+  return new Ticket({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price
+  });
 };
 ticketSchema.statics.findByEvent = ((event: {id:string, version: number}) => {
   return Ticket.findOne({

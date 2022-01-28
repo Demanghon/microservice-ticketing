@@ -1,6 +1,8 @@
 import { checkConfig, natsWrapper } from '@ticketing/common';
 
 import { app } from './app';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
+import { OrderCreateListener } from './events/listeners/order-created-listener';
 import { connect as connectToMongo } from './mongo/mongo-config';
 
 const start = async () => {
@@ -17,6 +19,9 @@ const start = async () => {
     });
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
+
+    new OrderCreateListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
    
   } catch (err) {
     console.error(err);
