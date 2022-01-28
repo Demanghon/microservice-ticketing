@@ -42,13 +42,14 @@ async (req: Request, res: Response) => {
         ticket: ticket,
         userId: req.currentUser!.id,
         expiresAt: expiration,
-        status: OrderStatus.Created
+        status: OrderStatus.Created,
     })
 
     await order.save();
 
     await new OrderCreatedPublsher(natsWrapper.client).publish({
         id: order.id,
+        version: order.version,
         status: order.status,
         userId: order.userId,
         expiresAt: order.expiresAt.toISOString(),

@@ -6,7 +6,9 @@ import newOrderRouter from './routes/new';
 import deletOrderRouter from './routes/delete';
 import showOrderRouter from './routes/show';
 import cookieSession from 'cookie-session';
-import { errorHandler, NotFoundError, setCurrentUser } from '@ticketing/common';
+import { errorHandler, natsWrapper, NotFoundError, setCurrentUser } from '@ticketing/common';
+import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
+import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
 
 const app = express();
 app.set('trust proxy', true);
