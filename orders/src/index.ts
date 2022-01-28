@@ -1,13 +1,13 @@
 import { checkConfig, natsWrapper } from '@ticketing/common';
 
 import { app } from './app';
+import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener';
 import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
 import { connect as connectToMongo } from './mongo/mongo-config';
 
 const start = async () => {
-  console.log("check conf");
-  checkConfig(["MONGO_URI", "JWT_KEY", "NATS_CLUSTER_ID", "NATS_CLIENT_ID", "NATS_URI"]);
+  checkConfig(["MONGO_URI", "JWT_KEY", "NATS_CLUSTER_ID", "NATS_CLIENT_ID", "NATS_URI", "EXPIRATION_WINDOW_SECONDS"]);
 
   try {
     await connectToMongo();
@@ -22,6 +22,7 @@ const start = async () => {
 
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
+    new ExpirationCompleteListener(natsWrapper.client).listen();
    
   } catch (err) {
     console.error(err);

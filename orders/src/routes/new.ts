@@ -7,8 +7,6 @@ import { OrderCreatedPublsher } from "../events/publishers/order-created-publish
 import { Order } from "../models/order";
 import { Ticket } from "../models/ticket";
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60;
-
 const router = express.Router();
 const newOrderRouter = router.post("/api/orders", 
     requireAuth,
@@ -35,7 +33,7 @@ async (req: Request, res: Response) => {
 
     //calculate the expiration date
     const expiration = new Date();
-    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS)
+    expiration.setSeconds(expiration.getSeconds() + +process.env.EXPIRATION_WINDOW_SECONDS!)
 
     //save the order
     const order = Order.build({

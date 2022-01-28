@@ -1,25 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-depl
+  name: expiration-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: orders
+      app: expiration
   template:
     metadata:
       labels:
-        app: orders
+        app: expiration
     spec:
       containers:
-        - name: orders
-          image: localhost:5000/ticketing-orders
+        - name: expiration
+          image: localhost:5000/ticketing-expiration
           env:
-            - name: EXPIRATION_WINDOW_SECONDS
-              value: "5" # number of seconds
-            - name: MONGO_URI
-              value: 'mongodb://orders-mongo-srv:27017/orders'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -33,16 +29,5 @@ spec:
               valueFrom: 
                 fieldRef: 
                     fieldPath: metadata.name
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: orders-clusterip-srv
-spec:
-  selector:
-    app: orders
-  ports:
-    - name: orders
-      protocol: TCP
-      port: 3000
-      targetPort: 3000
+            - name: REDIS_HOST
+              value: expiration-redis-srv
