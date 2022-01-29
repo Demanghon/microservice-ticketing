@@ -36,6 +36,20 @@
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "port": 9229
+        },
+        {
+            "name": "Debug Payments Tests",
+            "type": "node",
+            "request": "launch",
+            "localRoot": "${workspaceRoot}/payments",
+            "runtimeArgs": [
+                "--inspect-brk",
+                "${workspaceRoot}/payments/node_modules/.bin/jest",
+                "--runInBand", "--watchAll", "--no-cache"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "port": 9229
         }
     ]
 }

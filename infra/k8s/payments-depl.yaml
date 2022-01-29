@@ -1,25 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-depl
+  name: payments-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: orders
+      app: payments
   template:
     metadata:
       labels:
-        app: orders
+        app: payments
     spec:
       containers:
-        - name: orders
-          image: localhost:5000/ticketing-orders
+        - name: payments
+          image: localhost:5000/ticketing-payments
           env:
             - name: EXPIRATION_WINDOW_SECONDS
-              value: "60" # number of seconds
+              value: "5" # number of seconds
             - name: MONGO_URI
-              value: 'mongodb://orders-mongo-srv:27017/orders'
+              value: 'mongodb://payments-mongo-srv:27017/payments'
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret
+                  key: STRIPE_TEST_API_KEY
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -37,12 +42,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: orders-clusterip-srv
+  name: payments-clusterip-srv
 spec:
   selector:
-    app: orders
+    app: payments
   ports:
-    - name: orders
+    - name: payments
       protocol: TCP
       port: 3000
       targetPort: 3000

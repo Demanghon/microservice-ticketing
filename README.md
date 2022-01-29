@@ -41,6 +41,9 @@ This script :
 The *common* package that is a shared library for follwing projects :
 - auth
 - tickets
+- payments
+- orders
+- expiration
 
 From the development we use a local repository with [yalc](https://github.com/wclr/yalc) to test easily.
 
@@ -67,6 +70,9 @@ Go to the root directory and execute the following command:
 ```bash
 cd auth && yalc add @ticketing/common
 cd ../tickets && yalc add @ticketing/common
+cd ../orders && yalc add @ticketing/common
+cd ../payments && yalc add @ticketing/common
+cd ../expiration && yalc add @ticketing/common
 ```
 
 ### Update common package
@@ -78,6 +84,14 @@ yalc publish --push common
 ```
 
 > yalc publish --push will publish your package to the store and propagate all changes to existing yalc package installations (this will actually do update operation on the location). So, you have to assume the first update on each project to create the yalc package installation.
+
+## Stripe
+
+The payment service uses [Stripe](https://stripe.com/) as payment service provider. To use this service you have to configure a secret with you test api key:
+
+```bash
+kubectl create secret generic stripe-secret --from-literal=STRIPE_TEST_API_KEY="<your key>"
+```
 
 ## Start the stack
 
