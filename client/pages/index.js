@@ -1,19 +1,41 @@
-import buildClient from '../api/build-client';
+import Link from 'next/link';
 
-const LandingPage = ({currentUser}) => {
-  const content = currentUser !== undefined? "Your are signed in": "You are not signed in";
-  console.log(currentUser);
-  return <h1>{content}</h1>;
+const LandingPage = ({ currentUser, tickets }) => {
+  const ticketList = tickets.map((ticket) => {
+    return (
+      <tr key={ticket.id}>
+        <td>{ticket.title}</td>
+        <td>{ticket.price}</td>
+        <td>
+          <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
+            <a>View</a>
+          </Link>
+        </td>
+      </tr>
+    );
+  });
+
+  return (
+    <div>
+      <h1>Tickets</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>{ticketList}</tbody>
+      </table>
+    </div>
+  );
 };
 
+LandingPage.getInitialProps = async (context, client, currentUser) => {
+  const { data } = await client.get('/api/tickets');
 
-// This gets called on every request
-export const getServerSideProps = async ({req})  => {
-  console.log("SERVERSIDE LANDING PAGE");
-  // Fetch data from external API
-  const {data} = await buildClient({req}).get('/api/users/currentuser');
-  // Pass data to the page via props
-  return { props: data }
-}
+  return { tickets: data };
+};
 
 export default LandingPage;
